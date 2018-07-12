@@ -33,4 +33,4 @@ yarn prod
 
 ## Demo
 
-[https://junichi-h.github.io/just_a_sample/](こちら)においてあります。
+[こちら](https://junichi-h.github.io/just_a_sample/)においてあります。
