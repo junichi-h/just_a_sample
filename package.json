@@ -43,7 +43,7 @@
   "scripts": {
     "start": "concurrently --kill-others --raw \"yarn run dev\"",
     "dev": "cross-env NODE_ENV=development nodemon --require @babel/register server.js --watch server.js --port 9000",
-    "preprod": "rimraf ./dist",
+    "preprod": "rimraf ./docs",
     "prod": "NODE_ENV=prod gulp pug:prod && gulp styles:prod && gulp js:prod && gulp build"
   },
   "devDependencies": {

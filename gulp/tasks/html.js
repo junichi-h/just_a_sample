@@ -49,7 +49,7 @@ gulp.task('pug:prod', () => {
         basedir: 'app/'
       }))
       .pipe($.debug({title: 'pug Compiled:'}))
-      .pipe(gulp.dest('dist/'))
+      .pipe(gulp.dest('docs/'))
 });
 
 // ※ gulp js, pugを先に実行しておくこと
@@ -70,5 +70,5 @@ gulp.task('html', () => {
       })))
       .pipe(assets)
       .pipe($.useref())
-      .pipe(gulp.dest('dist/'));
+      .pipe(gulp.dest('docs/'));
 });

@@ -89,7 +89,7 @@ gulp.task('styles', ['stylelint'], () => {
       }))
       .pipe(postcss(processors))
       .pipe($.sourcemaps.write('.'))
-      .pipe(gulp.dest('.tmp/'))
+      .pipe(gulp.dest('.tmp/assets/styles'))
       .pipe(reload({match: "**/*.sass"}));
 });
 
@@ -104,5 +104,5 @@ gulp.task('styles:prod', ['stylelint'], () => {
         outputStyle: 'expand'
       }))
       .pipe(postcss(processors))
-      .pipe(gulp.dest('dist/'));
+      .pipe(gulp.dest('docs/assets/styles'));
 });
