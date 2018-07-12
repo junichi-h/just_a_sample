@@ -1,0 +1,7 @@
+// fontsizeをpxとremではかせる
+=font-size($font-size: 12)
+  $rem-size: $font-size * .1
+  font:
+    size: $font-size + px
+    // sass-lint:disable no-duplicate-properties
+    size: $rem-size + rem

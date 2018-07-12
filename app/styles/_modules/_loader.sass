@@ -1,0 +1,29 @@
+.loading-container
+  width: 100vw
+  height: 100vh
+  background: #333
+  position: absolute
+  top: 0
+  left: 0
+
+  .loader
+    border: 3px solid #ddd
+    border:
+      top: 3px solid #42a5f5
+      radius: 50%
+    width: 75px
+    height: 75px
+    position: absolute
+    top: 50%
+    left: 50%
+    margin:
+      top: -37px
+      left: -37px
+    animation: spin 1s linear infinite
+
+
+@keyframes spin
+  to
+    border:
+      top-color: #ec407a
+    transform: rotate(360deg)

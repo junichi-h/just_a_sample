@@ -1,0 +1,38 @@
+.button
+  display: inline-block
+  flex: 1 1 auto
+  margin: 10px
+  padding: 20px
+  border: 2px solid #f7f7f7
+  color: #fff
+  text:
+    align: center
+    transform: uppercase
+  position: relative
+  overflow: hidden
+  width: 20%
+  border-radius: 0
+  transition:
+    duration: .6s
+    property: border-radius
+    timing-function: $easeOutExpo
+
+  &:after
+    position: absolute
+    content: ''
+    width: 0
+    left: 50%
+    bottom: 0
+    height: 3px
+    background: #f7f7f7
+    transition:
+      duration: .6s
+      property: border-radius
+      timing-function: $easeOutExpo
+
+  &:hover
+    cursor: pointer
+    border-radius: 30px
+    &:after
+      left: 0
+
