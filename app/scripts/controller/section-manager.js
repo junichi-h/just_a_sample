@@ -26,6 +26,8 @@ class SectionManger extends EventEmitter{
     this._goto = this._goto.bind(this);
     this._onEnterAfter = this._onEnterAfter.bind(this);
     this._onExitAfter = this._onExitAfter.bind(this);
+
+    this._onResize = this._onResize.bind(this);
   }
 
   init(){
@@ -36,6 +38,8 @@ class SectionManger extends EventEmitter{
       section.on('enterAfter', this._onEnterAfter);
       section.on('exitAfter', this._onExitAfter);
     });
+    // add resize event
+    window.addEventListener('resize', this._onResize);
   }
 
   /**
@@ -91,6 +95,15 @@ class SectionManger extends EventEmitter{
     this._currentSectionIndex = next;
     this._sections[prev].onExit();
     this._sections[next].onEnter();
+  }
+
+  _onResize(){
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    this._sections.forEach((section) => {
+      section.resize(width, height);
+    });
   }
 }
 

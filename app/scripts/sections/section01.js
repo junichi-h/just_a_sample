@@ -30,7 +30,15 @@ class Section01 extends AbstractSection{
 
   onExit(){
     super.onExit();
+  }
 
+  resize(width, height){
+    super.resize(width, height);
+    if(width >= 740){
+      console.log('sp！！');
+    } else {
+      console.log('pc');
+    }
   }
 }
 

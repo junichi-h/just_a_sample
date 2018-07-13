@@ -62,6 +62,10 @@ class AbstractSection extends EventEmitter{
     });
   }
 
+  resize(width, height){
+    console.log(width, height);
+  }
+
   get isPlaying(){
     return this._isPlaying;
   }
