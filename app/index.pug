@@ -6,9 +6,9 @@ block vars
     };
 block main
   .contents
-    main
+    main(id='main')
      - for(var i = 0; i < 5; i++)
-        section(id=`section0${i + 1}` class=`section0${i + 1}`)
-          .inner #{`section0${i + 1}`}
+        section.section
+          .inner
      include ./_template/_button
      include ./_template/_loader

@@ -1,0 +1,58 @@
+[
+  {
+    "videoUrl": "video01.mp4",
+    "style": {
+          "background": "#ff748a"
+      },
+    "elements": [
+      {
+        "text": "section01"
+
+      }
+    ]
+  },
+  {
+    "videoUrl": "video02.mp4",
+    "style": {
+          "background": "#fff2e5"
+    },
+    "elements": [
+      {
+        "text": "section02"
+      }
+    ]
+  },
+  {
+    "videoUrl": "video03.mp4",
+    "style": {
+          "background": "#b7ded7"
+    },
+    "elements": [
+      {
+        "text": "section03"
+      }
+    ]
+  },
+  {
+    "videoUrl": "video04.mp4",
+    "style": {
+          "background": "#6f97b1"
+    },
+    "elements": [
+      {
+        "text": "section04"
+      }
+    ]
+  },
+  {
+    "videoUrl": "video05.mp4",
+    "style": {
+      "background": "#4d5784"
+    },
+    "elements": [
+      {
+        "text": "section05"
+      }
+    ]
+  }
+]

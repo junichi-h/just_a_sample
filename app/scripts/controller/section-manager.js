@@ -1,45 +1,94 @@
 import EventEmitter from 'eventemitter3';
-import Section01 from '../sections/section01';
-import Section02 from '../sections/section02';
-import Section03 from '../sections/section03';
-import Section04 from '../sections/section04';
-import Section05 from '../sections/section05';
+import { TweenLite, Expo } from 'gsap';
+import BulkLoader from '../loader/bulk-loader';
+import BaseSection from '../sections/base-section';
 
 class SectionManger extends EventEmitter{
   constructor(){
     super();
-
-    this._sections = [
-        new Section01(document.getElementById('section01')),
-        new Section02(document.getElementById('section02')),
-        new Section03(document.getElementById('section03')),
-        new Section04(document.getElementById('section04')),
-        new Section05(document.getElementById('section05'))
-    ];
-
+    this._sections = [];
     this._currentSectionIndex = 0;
     this._btnNext = document.getElementById('next');
     this._btnPrev = document.getElementById('prev');
+    this._jsonData = null;
 
+    this._onJSONLoadingCompleted = this._onJSONLoadingCompleted.bind(this);
+    this._hideLoader = this._hideLoader.bind(this);
     this._onNext = this._onNext.bind(this);
     this._onPrev = this._onPrev.bind(this);
     this._goto = this._goto.bind(this);
     this._onEnterAfter = this._onEnterAfter.bind(this);
     this._onExitAfter = this._onExitAfter.bind(this);
-
     this._onResize = this._onResize.bind(this);
+    this._preloadVideo = this._preloadVideo.bind(this);
+    this._onFirstVideoLoadingCompleted = this._onFirstVideoLoadingCompleted.bind(this);
   }
 
   init(){
+    // start loading json
+    BulkLoader.loadJSON('assets/data/section.json').then(this._onJSONLoadingCompleted);
+  }
+
+  /**
+   * JSON ローディング完了
+   * @param  {[type]} response [description]
+   * @return {[type]}          [description]
+   */
+  _onJSONLoadingCompleted(response){
+    const dataList = response.data;
+    this._jsonData = dataList;
+    // start load video
+    BulkLoader.loadVideo(`assets/videos/${dataList[0].videoUrl}`).then(this._onFirstVideoLoadingCompleted);
+    const parent = document.getElementById('main');
+    const children = parent.querySelectorAll('.section');
+
+    for(let i = 0, num = dataList.length; i < num; i++){
+      const section = new BaseSection(children[i], dataList[i]);
+      section.init();
+      this._sections[i] = section;
+    }
+
+    this._hideLoader();
+  }
+
+  /**
+   * 最初の動画読み込み終えたら次の
+   * @return {[type]} [description]
+   */
+  _onFirstVideoLoadingCompleted(){
+    this._preloadVideo();
+  }
+
+  _hideLoader(){
+    const loader = document.getElementById('loader');
+    const inner = loader.querySelector('.loader');
+    const buttonContainer = document.getElementById('button-container');
+
     this._btnNext.addEventListener('click', this._onNext);
     this._btnPrev.addEventListener('click', this._onPrev);
-    this._sections[this._currentSectionIndex].onEnter();
-    this._sections.forEach((section) => {
-      section.on('enterAfter', this._onEnterAfter);
-      section.on('exitAfter', this._onExitAfter);
+
+    TweenLite.set(buttonContainer, { alpha: 0 });
+    TweenLite.to(inner, 1, {
+      scaleX: 0.6,
+      scaleY: 0.6,
+      ease: Expo.easeOut
     });
-    // add resize event
-    window.addEventListener('resize', this._onResize);
+    TweenLite.to(loader, 1.2, {
+      alpha: 0,
+      delay: .2,
+      display: 'none',
+      ease: Expo.easeOut,
+      onComplete: () => {
+        console.log(this._sections[0]);
+        this._sections[0].onEnter();
+        window.setTimeout(() => {
+          TweenLite.to(document.getElementById('button-container'), 0.6, {
+            alpha: 1,
+            ease: Expo.easeOut
+          });
+        }, 1500)
+      }
+    });
   }
 
   /**
@@ -93,8 +142,22 @@ class SectionManger extends EventEmitter{
       return;
     }
     this._currentSectionIndex = next;
+    this._preloadVideo();
     this._sections[prev].onExit();
     this._sections[next].onEnter();
+  }
+
+  /**
+   * 今表示してる次のSection用の動画を読み込みさせる
+   * @return {[type]} [description]
+   */
+  _preloadVideo(){
+    const nextIndex = Math.min(this._currentSectionIndex + 1, this._sections.length - 1);
+    const nextVideoUrl = `assets/videos/${this._jsonData[nextIndex].videoUrl}`;
+    const item = BulkLoader.getItemByKey(nextVideoUrl);
+    if(item === null){
+      BulkLoader.loadVideo(nextVideoUrl);
+    }
   }
 
   _onResize(){

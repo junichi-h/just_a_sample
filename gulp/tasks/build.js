@@ -10,20 +10,28 @@ gulp.task('extras', () => {
     '!app/*.pug'
   ], {
     dot: true
-  }).pipe(gulp.dest('dist'));
-
-  /* gulp.src([
-      '.tmp/assets/styles/!**'
-  ]).pipe(gulp.dest('dist/assets/styles'));*/
+  }).pipe(gulp.dest('docs'));
 
   gulp.src([
     'app/assets/images/**'
   ], {
     dot: false
-  }).pipe(gulp.dest('dist/assets/images'));
+  }).pipe(gulp.dest('docs/assets/images'));
+
+  gulp.src([
+    'app/assets/data/**'
+  ], {
+    dot: false
+  }).pipe(gulp.dest('docs/assets/data'));
+
+  gulp.src([
+    'app/assets/videos/**'
+  ], {
+    dot: false
+  }).pipe(gulp.dest('docs/assets/videos'));
 });
 
 gulp.task('build', ['html', 'extras'], () => {
-  return gulp.src('dist/**/*')
+  return gulp.src('docs/**/*')
       .pipe($.size({title: 'build', gzip: true}));
 });
