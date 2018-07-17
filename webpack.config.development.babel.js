@@ -4,7 +4,10 @@ import merge from 'webpack-merge';
 
 export default merge.smart(baseConfig, {
   entry: {
-    index: './app/scripts/index.js'
+    index: [
+      '@babel/polyfill',
+      './app/scripts/index.js'
+    ]
   },
   devtool: 'source-map',
   plugins: [
