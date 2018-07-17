@@ -35,7 +35,7 @@ class SectionManger extends EventEmitter{
    * @return {[type]}          [description]
    */
   _onJSONLoadingCompleted(response){
-    const dataList = response.data;
+    const dataList = response;
     this._jsonData = dataList;
     // start load video
     BulkLoader.loadVideo(`assets/videos/${dataList[0].videoUrl}`).then(this._onFirstVideoLoadingCompleted);

@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const items = {};
 
 class BulkLoader{
@@ -10,17 +8,29 @@ class BulkLoader{
 	 */
 	static loadJSON(url){
 		return new Promise((resolve, reject) => {
-			axios({
-				method: 'get',
-				url
-			}).then((response) => {
-				items[url] = {
-					data: response
-				};
-				resolve(response);
-			}).catch((error) => {
+			const xhr = new XMLHttpRequest();
+			const onJSONLoadingCompleted = (event) => {
+				xhr.removeEventListener('load', onJSONLoadingCompleted);
+				xhr.removeEventListener('error', onError);
+				if(xhr.readyState === 4 && xhr.status === 200){
+					items[url] = {
+						data: xhr.response
+					}
+					resolve(xhr.response);
+				}
+			};
+
+			const onError = (error) => {
+				xhr.removeEventListener('load', onJSONLoadingCompleted);
+				xhr.removeEventListener('error', onError);
 				reject(error);
-			});
+			};
+
+			xhr.addEventListener('load', onJSONLoadingCompleted);
+			xhr.addEventListener('error', onError);
+			xhr.responseType = 'json';
+			xhr.open('get', url, true);
+			xhr.send();
 		});
 	}
 
@@ -31,17 +41,24 @@ class BulkLoader{
 	 */
 	static loadVideo(url){
 		return new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
 			const onVideoCompleted = (event) => {
-				const _xhr = event.target;
-				_xhr.removeEventListener('load', onVideoCompleted);
-				if(_xhr.readyState === 4 && _xhr.status === 200){
-					items[url] = {data: _xhr};
-					resolve(_xhr.responseURL);
+				xhr.removeEventListener('load', onVideoCompleted);
+				xhr.removeEventListener('error', onError);
+				if(xhr.readyState === 4 && xhr.status === 200){
+					items[url] = {data: xhr};
+					resolve(xhr.responseURL);
 				}
 			};
+			
+			const onError = (error) => {
+				xhr.removeEventListener('load', onVideoCompleted);
+				xhr.removeEventListener('error', onError);
+				reject(error);
+			};
 
-			const xhr = new XMLHttpRequest();
 			xhr.addEventListener('load', onVideoCompleted);
+			xhr.addEventListener('error', onError);
 			xhr.open('get', url, true);
 			xhr.responseType = 'blob';
 			xhr.send();
